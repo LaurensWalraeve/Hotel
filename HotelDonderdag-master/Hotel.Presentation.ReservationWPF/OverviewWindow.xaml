@@ -1,0 +1,36 @@
+﻿<Window x:Class="Hotel.Presentation.ReservationWPF.OverviewWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Overzicht" Height="450" Width="800">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Confirmation Button -->
+        <Button Grid.Row="0" Name="ConfirmButton" Content="Bevestigen" HorizontalAlignment="Stretch" Margin="5" Click="ConfirmButton_Click"/>
+
+        <!-- Customer Details -->
+        <StackPanel Grid.Row="1" Orientation="Vertical" Margin="5">
+            <Label Content="Klant Naam"/>
+            <TextBox Name="CustomerNameTextBox" IsReadOnly="True"/>
+        </StackPanel>
+
+        <!-- Member Details -->
+        <StackPanel Grid.Row="2" Orientation="Vertical" Margin="5">
+            <Label Content="Leden"/>
+            <ListBox Name="MembersListBox" Height="100"/>
+        </StackPanel>
+
+        <!-- Activity Details -->
+        <StackPanel Grid.Row="3" Orientation="Vertical" Margin="5">
+            <Label Content="Activiteit Naam"/>
+            <TextBox Name="ActivityNameTextBox" IsReadOnly="True"/>
+        </StackPanel>
+    </Grid>
+</Window>
