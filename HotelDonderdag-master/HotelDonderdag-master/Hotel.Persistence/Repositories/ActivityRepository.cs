@@ -32,7 +32,7 @@ INNER JOIN Organizer o ON a.OrganizerID = o.OrganizerID WHERE a.Status = 1");
 
             if (!string.IsNullOrEmpty(filter))
             {
-                sql.Append(" WHERE a.OrganizerID = @OrganizerID AND a.Status = 1");
+                sql.Append(" AND a.OrganizerID = @OrganizerID AND a.Status = 1");
             }
 
             using (SqlConnection conn = new SqlConnection(connectionString))

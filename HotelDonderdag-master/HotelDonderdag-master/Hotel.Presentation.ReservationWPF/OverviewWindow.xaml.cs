@@ -5,6 +5,7 @@ using Hotel.Presentation.CustomerWPF.Model; // Assuming this is where your model
 using Hotel.Presentation.OrganizerWPF.Model;
 using Hotel.Util;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Windows;
 
@@ -48,7 +49,6 @@ namespace Hotel.Presentation.ReservationWPF
         {
             try
             {
-                // Assuming you have these classes 
 
                 // Create CustomerRegistration object
                 var customerRegistration = new CustomerRegistration
@@ -90,14 +90,21 @@ namespace Hotel.Presentation.ReservationWPF
 
         private decimal CalculateTotalCost()
         {
-            // Assuming the adult price is per person
-            decimal adultPrice = _selectedActivity.AdultPrice;
+            decimal totalCost = 0;
+            foreach (var memberUI in _selectedMembers)
+            {
+                // Convert DateOnly to DateTime
+                DateTime birthdayDateTime = memberUI.Birthday.ToDateTime(new TimeOnly());
 
-            // Total number of people includes the customer and all the members
-            int totalPeopleCount = 1 + _selectedMembers.Count; // 1 for the customer
-
-            // Calculate total cost
-            decimal totalCost = adultPrice * totalPeopleCount;
+                if (birthdayDateTime.AddYears(18) <= DateTime.Today)
+                {
+                    totalCost += _selectedActivity.AdultPrice;
+                }
+                else
+                {
+                    totalCost += _selectedActivity.ChildPrice;
+                }
+            }
 
             return totalCost;
         }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Hotel.Domain.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -63,16 +64,97 @@ namespace Hotel.Domain.Model
 
         public int ActivityID { get; set; }
         public Organizer Organizer { get; set; }
-        public string Description { get; set; }
-        public string Location { get; set; }
-        public int Duration { get; set; }
-        public string ActivityName { get; set; }
+        private string _description;
+        public string Description
+        {
+            get => _description;
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                    throw new ActivityException("Description cannot be null or whitespace.");
+                _description = value;
+            }
+        }
+        private string _location;
+        public string Location
+        {
+            get => _location;
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                    throw new ActivityException("Location cannot be null or whitespace.");
+                _location = value;
+            }
+        }
+        private int _duration;
+        public int Duration
+        {
+            get => _duration;
+            set
+            {
+                if (value <= 0)
+                    throw new ActivityException("Duration must be positive.");
+                _duration = value;
+            }
+        }
+        private string _activityName;
+        public string ActivityName
+        {
+            get => _activityName;
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                    throw new ActivityException("Activity name cannot be null or whitespace.");
+                _activityName = value;
+            }
+        }
         public DateTime DateScheduled { get; set; }
-        public int AvailableSpots { get; set; }
-        public decimal AdultPrice { get; set; }
-        public decimal ChildPrice { get; set; }
-        public decimal Discount { get; set; }
+        private int _availableSpots;
+        public int AvailableSpots
+        {
+            get => _availableSpots;
+            set
+            {
+                if (value < 0)
+                    throw new ActivityException("Available spots cannot be negative.");
+                _availableSpots = value;
+            }
+        }
+        private decimal _adultPrice;
+        public decimal AdultPrice
+        {
+            get => _adultPrice;
+            set
+            {
+                if (value < 0)
+                    throw new ActivityException("Adult price cannot be negative.");
+                _adultPrice = value;
+            }
+        }
+        private decimal _childPrice;
+        public decimal ChildPrice
+        {
+            get => _childPrice;
+            set
+            {
+                if (value < 0)
+                    throw new ActivityException("Child price cannot be negative.");
+                _childPrice = value;
+            }
+        }
+        private decimal _discount;
+        public decimal Discount
+        {
+            get => _discount;
+            set
+            {
+                if (value < 0)
+                    throw new ActivityException("Discount cannot be negative.");
+                _discount = value;
+            }
+        }
         public bool Status { get; set; }
         public virtual ICollection<CustomerRegistration> CustomerRegistrations { get; set; }
+
     }
 }

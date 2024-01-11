@@ -17,9 +17,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hotel.Util", "Hotel.Util\Ho
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hotel.Presentation.CustomerWPF", "Hotel.Presentation.CustomerWPF\Hotel.Presentation.CustomerWPF.csproj", "{6FC042D1-CCA0-4DA7-98A4-AAD8968D6D28}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hotel.Presentation.OrganizerWPF", "Hotel.Presentation.OrganizerWPF\Hotel.Presentation.OrganizerWPF.csproj", "{D1DB7DA5-518D-46E4-B5F2-6119006DB418}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hotel.Presentation.OrganizerWPF", "Hotel.Presentation.OrganizerWPF\Hotel.Presentation.OrganizerWPF.csproj", "{D1DB7DA5-518D-46E4-B5F2-6119006DB418}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hotel.Presentation.ReservationWPF", "Hotel.Presentation.ReservationWPF\Hotel.Presentation.ReservationWPF.csproj", "{F4F28A50-BF15-496A-A6D7-7331AC6524E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hotel.Presentation.ReservationWPF", "Hotel.Presentation.ReservationWPF\Hotel.Presentation.ReservationWPF.csproj", "{F4F28A50-BF15-496A-A6D7-7331AC6524E7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hotel.Test", "Hotel.Test\Hotel.Test.csproj", "{C0166043-42A7-4E4D-BFC9-2C0390679073}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +57,10 @@ Global
 		{F4F28A50-BF15-496A-A6D7-7331AC6524E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F4F28A50-BF15-496A-A6D7-7331AC6524E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F4F28A50-BF15-496A-A6D7-7331AC6524E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0166043-42A7-4E4D-BFC9-2C0390679073}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0166043-42A7-4E4D-BFC9-2C0390679073}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0166043-42A7-4E4D-BFC9-2C0390679073}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0166043-42A7-4E4D-BFC9-2C0390679073}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

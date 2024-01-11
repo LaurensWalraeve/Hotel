@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Hotel.Domain.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,7 @@ namespace Hotel.Domain.Model
         // Constructor for creating a new CustomerRegistration
         public CustomerRegistration(Customer customer, Activity activity, decimal totalCost, bool status)
         {
+            ValidateParameters(customer, activity, totalCost);
             Customer = customer;
             Activity = activity;
             TotalCost = totalCost;
@@ -19,6 +21,7 @@ namespace Hotel.Domain.Model
         }
         public CustomerRegistration(Customer customer, Activity activity, decimal totalCost)
         {
+            ValidateParameters(customer, activity, totalCost);
             Customer = customer;
             Activity = activity;
             TotalCost = totalCost;
@@ -32,7 +35,18 @@ namespace Hotel.Domain.Model
         public decimal TotalCost { get; set; }
         public bool Status { get; set; }
 
-        // Navigation property for registration members
         public virtual ICollection<RegistrationMember> RegistrationMembers { get; set; }
+
+        private void ValidateParameters(Customer customer, Activity activity, decimal totalCost)
+        {
+            if (customer == null)
+                throw new ReservationException("Customer cannot be null.");
+
+            if (activity == null)
+                throw new ReservationException("Activity cannot be null.");
+
+            if (totalCost < 0)
+                throw new ReservationException("Total cost cannot be negative.");
+        }
     }
 }
