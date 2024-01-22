@@ -30,6 +30,7 @@ namespace Hotel.Presentation.ReservationWPF
             _selectedActivity = selectedActivity;
             reservationManager = new ReservationManager(RepositoryFactory.ReservationRepository);
             DisplayDetails();
+
         }
 
         private void DisplayDetails()
@@ -43,13 +44,16 @@ namespace Hotel.Presentation.ReservationWPF
             // Displaying activity details
             ActivityNameTextBox.Text = _selectedActivity.ActivityName;
             // Optionally add more activity details here
+
+            decimal TotalCost = CalculateTotalCost();
+
+            PrijsTextBox.Text = TotalCost.ToString();
         }
 
         private void ConfirmButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-
                 // Create CustomerRegistration object
                 var customerRegistration = new CustomerRegistration
                 {
@@ -59,14 +63,12 @@ namespace Hotel.Presentation.ReservationWPF
                                                       // Status = true; // If needed
                 };
 
-                // Add Customer Registration
-                reservationManager.AddRegistrationCustomer(customerRegistration);
+                // Create a list to hold all Member Registrations
+                List<RegistrationMember> registrationMembers = new List<RegistrationMember>();
 
-                // Add each Member Registration
+                // Prepare each Member Registration
                 foreach (var memberUI in _selectedMembers)
                 {
-
-
                     var registrationMember = new RegistrationMember
                     {
                         Customer = new Customer { Id = _selectedCustomer.Id.Value },
@@ -75,8 +77,11 @@ namespace Hotel.Presentation.ReservationWPF
                         // Status = true; // If needed
                     };
 
-                    reservationManager.AddRegistrationMember(registrationMember);
+                    registrationMembers.Add(registrationMember);
                 }
+
+                // Add Customer Registration and all Member Registrations in a single transaction
+                reservationManager.AddRegistration(customerRegistration, registrationMembers);
 
                 MessageBox.Show("Reservering succesvol toegevoegd.", "Bevestiging", MessageBoxButton.OK, MessageBoxImage.Information);
                 this.DialogResult = true;
@@ -87,6 +92,7 @@ namespace Hotel.Presentation.ReservationWPF
                 MessageBox.Show($"Er is een fout opgetreden: {ex.Message}", "Fout", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
 
         private decimal CalculateTotalCost()
         {

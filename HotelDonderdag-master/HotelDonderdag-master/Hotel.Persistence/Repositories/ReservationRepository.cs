@@ -19,56 +19,68 @@ namespace Hotel.Persistence.Repositories
             this.connectionString = connectionString;
         }
 
-        public void AddRegistrationCustomer(CustomerRegistration customerRegistration)
+
+        public void AddRegistration(CustomerRegistration customerRegistration, List<RegistrationMember> registrationMembers)
         {
-            string sql = @"
-    INSERT INTO CustomerRegistration (CustomerID, ActivityID, TotalCost, Status) 
-    VALUES (@CustomerID, @ActivityID, @TotalCost, @Status); 
-    SELECT SCOPE_IDENTITY();";  // To get the newly created ID
-
             using (SqlConnection conn = new SqlConnection(connectionString))
-            using (SqlCommand cmd = new SqlCommand(sql, conn))
             {
-                cmd.Parameters.AddWithValue("@CustomerID", customerRegistration.Customer.Id);
-                cmd.Parameters.AddWithValue("@ActivityID", customerRegistration.Activity.ActivityID);
-                cmd.Parameters.AddWithValue("@TotalCost", customerRegistration.TotalCost);
-                cmd.Parameters.AddWithValue("@Status", 1); // Assuming '1' is for active/true
-
                 conn.Open();
-                cmd.ExecuteNonQuery();
+
+                using (SqlTransaction transaction = conn.BeginTransaction())
+                {
+                    try
+                    {
+                        // Add customer registration
+                        string sqlCustomerRegistration = @"
+                                INSERT INTO CustomerRegistration (CustomerID, ActivityID, TotalCost, Status) 
+                                VALUES (@CustomerID, @ActivityID, @TotalCost, @Status); 
+                                SELECT SCOPE_IDENTITY();";  // To get the newly created ID
+
+                        using (SqlCommand cmd = new SqlCommand(sqlCustomerRegistration, conn, transaction))
+                        {
+                            cmd.Parameters.AddWithValue("@CustomerID", customerRegistration.Customer.Id);
+                            cmd.Parameters.AddWithValue("@ActivityID", customerRegistration.Activity.ActivityID);
+                            cmd.Parameters.AddWithValue("@TotalCost", customerRegistration.TotalCost);
+                            cmd.Parameters.AddWithValue("@Status", 1); // Assuming '1' is for active/true
+
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        // Add each registration member
+                        foreach (var registrationMember in registrationMembers)
+                        {
+                            string sqlRegistrationMember = @"
+                                    INSERT INTO RegistrationMembers (CustomerID, ActivityID, MemberName, MemberBirthDay, Status) 
+                                    VALUES (@CustomerID, @ActivityID, @MemberName, @MemberBirthDay, @Status);";
+
+                            using (SqlCommand cmd = new SqlCommand(sqlRegistrationMember, conn, transaction))
+                            {
+                                cmd.Parameters.AddWithValue("@CustomerID", registrationMember.Customer.Id);
+                                cmd.Parameters.AddWithValue("@ActivityID", registrationMember.Activity.ActivityID);
+                                cmd.Parameters.AddWithValue("@MemberName", registrationMember.Member.Name);
+
+                                var memberBirthdayDateTime = new DateTime(registrationMember.Member.Birthday.Year, registrationMember.Member.Birthday.Month, registrationMember.Member.Birthday.Day);
+                                cmd.Parameters.AddWithValue("@MemberBirthDay", memberBirthdayDateTime);
+
+                                cmd.Parameters.AddWithValue("@Status", 1); // Assuming '1' is for active/true
+
+                                cmd.ExecuteNonQuery();
+                            }
+                        }
+
+                        // Commit the transaction
+                        transaction.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        // Roll back the transaction
+                        transaction.Rollback();
+                        throw;
+                    }
+                }
             }
         }
-
-
-
-        public void AddRegistrationMember(RegistrationMember registrationMember)
-        {
-            string sql = @"
-INSERT INTO RegistrationMembers (CustomerID, ActivityID, MemberName, MemberBirthDay, Status) 
-VALUES (@CustomerID, @ActivityID, @MemberName, @MemberBirthDay, @Status);";
-
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            using (SqlCommand cmd = new SqlCommand(sql, conn))
-            {
-                cmd.Parameters.AddWithValue("@CustomerID", registrationMember.Customer.Id);
-                cmd.Parameters.AddWithValue("@ActivityID", registrationMember.Activity.ActivityID);
-                cmd.Parameters.AddWithValue("@MemberName", registrationMember.Member.Name);
-
-                // Convert DateOnly to DateTime
-                var memberBirthdayDateTime = new DateTime(registrationMember.Member.Birthday.Year, registrationMember.Member.Birthday.Month, registrationMember.Member.Birthday.Day);
-                cmd.Parameters.AddWithValue("@MemberBirthDay", memberBirthdayDateTime);
-
-                cmd.Parameters.AddWithValue("@Status", 1); // Assuming '1' is for active/true
-
-                conn.Open();
-                cmd.ExecuteNonQuery();
-            }
-        }
-
-
-
-
-
 
     }
+
 }

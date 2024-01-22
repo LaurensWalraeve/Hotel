@@ -9,9 +9,7 @@ namespace Hotel.Domain.Interfaces
 {
     public interface IReservationRepository
     {
-        void AddRegistrationCustomer(CustomerRegistration customerRegistration);
-
-        void AddRegistrationMember(RegistrationMember registrationMember);
+        void AddRegistration(CustomerRegistration customerRegistration, List<RegistrationMember> registrationMembers);
 
     }
 }

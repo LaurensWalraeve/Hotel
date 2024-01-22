@@ -18,11 +18,11 @@ namespace Hotel.Domain.Managers
             _reservationRepository = reservationRepository;
         }
 
-        public void AddRegistrationCustomer(CustomerRegistration customerRegistration)
+        public void AddRegistration(CustomerRegistration customerRegistration, List<RegistrationMember> registrationMembers)
         {
             try
             {
-                _reservationRepository.AddRegistrationCustomer(customerRegistration);
+                _reservationRepository.AddRegistration(customerRegistration, registrationMembers);
             }
             catch (Exception ex)
             {
@@ -30,16 +30,6 @@ namespace Hotel.Domain.Managers
             }
         }
 
-        public void AddRegistrationMember(RegistrationMember registrationMember)
-        {
-            try
-            {
-                _reservationRepository.AddRegistrationMember(registrationMember);
-            }
-            catch (Exception ex)
-            {
-                throw new ReservationManagerException("AddRegistrationMember");
-            }
-        }
+
     }
 }
